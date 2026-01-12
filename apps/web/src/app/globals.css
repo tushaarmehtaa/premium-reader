@@ -1,0 +1,358 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   NEO-EDITORIAL DESIGN SYSTEM
+   A warm, tactile, premium reading experience
+   ============================================ */
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+/* ============================================
+   CSS Custom Properties - The Design Tokens
+   ============================================ */
+:root {
+  /* Paper & Ink */
+  --paper: #F9F9F7;
+  --paper-warm: #F5F5F0;
+  --ink: #1C1C1C;
+  --ink-secondary: #4A4A4A;
+  --ink-muted: #6B6B6B;
+  --ink-faint: #8A8A8A;
+  
+  /* Accents */
+  --accent-amber: #D97706;
+  --accent-forest: #14532D;
+  
+  /* Borders */
+  --border-subtle: #E5E5E0;
+  --border-warm: #DEDEDA;
+  
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Merriweather', Georgia, serif;
+  --font-ui: 'Inter', -apple-system, sans-serif;
+  
+  /* Spacing */
+  --reading-width: 65ch;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================
+   Typography Classes
+   ============================================ */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.font-body {
+  font-family: var(--font-body);
+  line-height: 1.8;
+}
+
+.font-ui {
+  font-family: var(--font-ui);
+}
+
+/* Editorial headline styles */
+.headline-hero {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.headline-section {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* ============================================
+   Component Classes
+   ============================================ */
+
+/* Command Line Input Style */
+.input-command {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.5rem;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  width: 100%;
+  caret-color: var(--accent-amber);
+}
+
+.input-command::placeholder {
+  color: var(--ink-faint);
+}
+
+.input-command:focus {
+  outline: none;
+}
+
+/* Floating Island */
+.floating-island {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(249, 249, 247, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 24px -4px rgba(0,0,0,0.08);
+  z-index: 100;
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-island.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+  pointer-events: none;
+}
+
+/* Button Styles */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--border-warm);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 300ms ease-out;
+}
+
+.btn-outline:hover {
+  border-color: var(--ink-muted);
+  background: rgba(0,0,0,0.02);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--paper);
+  background: var(--ink);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 300ms ease-out;
+}
+
+.btn-primary:hover {
+  background: var(--ink-secondary);
+}
+
+.btn-ghost {
+  padding: 8px 16px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ink-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 300ms ease-out;
+}
+
+.btn-ghost:hover {
+  color: var(--ink);
+  background: rgba(0,0,0,0.04);
+}
+
+.btn-ghost.active {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* ============================================
+   Reading Experience
+   ============================================ */
+.prose-editorial {
+  max-width: var(--reading-width);
+  margin: 0 auto;
+}
+
+.prose-editorial p {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 1.5em;
+}
+
+.prose-editorial strong,
+.prose-editorial .key-insight {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Scan mode text fading */
+.prose-editorial.scan-mode p {
+  color: var(--ink-faint);
+}
+
+.prose-editorial.scan-mode strong,
+.prose-editorial.scan-mode .key-insight {
+  color: var(--ink);
+}
+
+/* ============================================
+   Skeleton Loading Animation
+   ============================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--border-subtle) 0%,
+    var(--paper-warm) 50%,
+    var(--border-subtle) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 1.2em;
+  margin-bottom: 0.8em;
+}
+
+.skeleton-text:nth-child(odd) {
+  width: 100%;
+}
+
+.skeleton-text:nth-child(even) {
+  width: 85%;
+}
+
+.skeleton-text:last-child {
+  width: 60%;
+}
+
+/* ============================================
+   Staggered Fade-in Animation
+   ============================================ */
+.stagger-fade-in > * {
+  opacity: 0;
+  animation: fadeSlideUp 0.5s ease-out forwards;
+}
+
+.stagger-fade-in > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-fade-in > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-fade-in > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-fade-in > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-fade-in > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-fade-in > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-fade-in > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-fade-in > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-fade-in > *:nth-child(n+9) { animation-delay: 400ms; }
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Transitions & Interactions
+   ============================================ */
+* {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a, button {
+  transition: all 300ms ease-out;
+}
+
+/* Focus states */
+:focus-visible {
+  outline: 2px solid var(--accent-amber);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(217, 119, 6, 0.2);
+  color: var(--ink);
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-warm);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-faint);
+}
+
+/* ============================================
+   Legacy Reader Classes (Compatibility)
+   ============================================ */
+.key-insight {
+  font-weight: 700;
+}
+
+.premium-reader {
+  animation: fadeSlideUp 300ms ease-out;
+}
