@@ -58,6 +58,27 @@ export default function LoginPage() {
     }
   };
 
+  // Check if Supabase is configured
+  if (!supabase) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-6">
+        <div className="w-full max-w-md text-center">
+          <div className="text-6xl mb-6">🚧</div>
+          <h1 className="text-2xl font-serif mb-4">Authentication Not Configured</h1>
+          <p className="text-gray-600 mb-6">
+            Supabase authentication is not set up yet. Try the demo instead!
+          </p>
+          <Link
+            href="/demo"
+            className="inline-block bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition"
+          >
+            Try Demo
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
