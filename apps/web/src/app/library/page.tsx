@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { createServerClient } from '@/lib/supabase-server';
 import { Navbar } from '@/components/Navbar';
 import { LibraryGrid } from '@/components/LibraryGrid';
@@ -45,12 +46,12 @@ export default async function LibraryPage() {
             <p className="text-gray-500 mb-6">
               Install the Chrome extension to start saving articles
             </p>
-            <a
+            <Link
               href="/#get-extension"
               className="inline-block bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition"
             >
               Get the Extension
-            </a>
+            </Link>
           </div>
         )}
       </main>

@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useClientSearchParams } from '@/hooks/useClientSearchParams';
 import { PremiumReader } from '@premium-reader/reader-ui';
 import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -53,7 +55,7 @@ export default function AppPage() {
   const [error, setError] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const searchParams = useSearchParams();
+  const searchParams = useClientSearchParams();
   const hasFetched = useRef(false);
 
   // Auto-fetch if URL is provided in query params

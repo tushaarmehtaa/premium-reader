@@ -68,16 +68,16 @@ export const articleRoutes: FastifyPluginAsync = async (fastify) => {
         return reply.code(400).send({ error: 'userId required when using database' });
       }
 
-      const { data: existing } = await db
-        .from('articles')
+      const { data: existing } = await (db
+        .from('articles') as any)
         .select('id')
         .eq('url', url)
         .eq('user_id', userId)
         .single();
 
       if (existing) {
-        const { data, error } = await db
-          .from('articles')
+        const { data, error } = await (db
+          .from('articles') as any)
           .update({
             title,
             author,
@@ -87,7 +87,7 @@ export const articleRoutes: FastifyPluginAsync = async (fastify) => {
             insights: insights || [],
             saved_at: new Date().toISOString(),
           })
-          .eq('id', existing.id)
+          .eq('id', (existing as any).id)
           .select()
           .single();
 
@@ -97,8 +97,8 @@ export const articleRoutes: FastifyPluginAsync = async (fastify) => {
         return { article: data, updated: true };
       }
 
-      const { data, error } = await db
-        .from('articles')
+      const { data, error } = await (db
+        .from('articles') as any)
         .insert({
           url,
           title,

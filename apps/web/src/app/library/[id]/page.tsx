@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import { PremiumReader } from '@premium-reader/reader-ui';
@@ -20,7 +20,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     async function loadArticle() {
@@ -51,7 +51,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
     }
 
     loadArticle();
-  }, [params.id, supabase]);
+  }, [params.id]);
 
   const handleClose = () => {
     router.push('/library');

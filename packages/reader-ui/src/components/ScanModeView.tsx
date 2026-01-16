@@ -28,7 +28,7 @@ export function ScanModeView() {
     <article>
       {paragraphs.map((p) => {
         const plainText = p.html.replace(/<[^>]*>/g, '');
-        const keyInsight = p.insight || getFirstSentence(p.html);
+        const keyInsight = p.insightText || getFirstSentence(p.html);
         const remainingText = plainText.replace(keyInsight, '').trim();
 
         return (

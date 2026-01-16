@@ -2,11 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+// Note: framer-motion adds ~60KB to bundle. Consider splitting this page into
+// server components with dynamically imported animated sections for better performance.
 import { motion } from 'framer-motion';
 
 export default function HomePage() {
   const [urlInput, setUrlInput] = useState('');
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const handleSubmit = () => {
     if (urlInput.trim()) {
@@ -37,19 +52,19 @@ export default function HomePage() {
 
         <div className="max-w-4xl mx-auto text-center relative z-10 pt-20">
           <motion.h1
-            initial={{ opacity: 0, y: 60 }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="font-display text-[14vw] md:text-[9rem] leading-[0.85] tracking-tighter text-ink mb-12"
           >
-            Don’t read <br />
+            Don't read <br />
             <span className="font-serif italic text-ink-secondary/70">the whole thing.</span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="font-sans text-lg md:text-xl text-ink-secondary max-w-lg mx-auto mb-16 leading-relaxed font-light"
           >
             The internet is 90% noise. Sutra finds the 10% that matters before you commit your time.
@@ -57,19 +72,22 @@ export default function HomePage() {
 
           {/* The Input - Refined and Seamless */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-xl mx-auto relative group z-20"
           >
             <div className="absolute inset-0 bg-white rounded-full shadow-2xl shadow-black/5" />
             <div className="relative flex items-center p-2 h-16">
               <input
                 type="url"
+                name="article-url"
+                autoComplete="url"
+                spellCheck={false}
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
-                placeholder="Paste an article link..."
-                className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 pl-8 text-lg font-serif placeholder:font-sans placeholder:text-ink-muted/40 text-ink h-full rounded-l-full"
+                placeholder="Paste an article link…"
+                className="flex-1 bg-transparent border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 pl-8 text-lg font-serif placeholder:font-sans placeholder:text-ink-muted/40 text-ink h-full rounded-l-full"
                 onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
               />
               <button
@@ -82,9 +100,9 @@ export default function HomePage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8, delay: 0.6 }}
             className="mt-6"
           >
             <a
@@ -106,21 +124,21 @@ export default function HomePage() {
           <div className="space-y-32">
 
             {/* Stanza 1 */}
-            <FadeIn className="text-center">
+            <FadeIn className="text-center" prefersReducedMotion={prefersReducedMotion}>
               <p className="font-serif text-3xl md:text-5xl leading-tight text-ink">
                 Your attention is the only<br /> currency you really have.
               </p>
             </FadeIn>
 
             {/* Stanza 2 */}
-            <FadeIn className="text-center max-w-lg mx-auto">
+            <FadeIn className="text-center max-w-lg mx-auto" prefersReducedMotion={prefersReducedMotion}>
               <p className="font-sans text-lg text-ink-secondary leading-loose">
                 Yet modern interfaces are designed to bankrupt you. They lure you with clickbait, bury you in ads, and fracture your focus.
               </p>
             </FadeIn>
 
             {/* The Solution */}
-            <FadeIn className="text-center border-y border-black/5 py-24 my-16">
+            <FadeIn className="text-center border-y border-black/5 py-24 my-16" prefersReducedMotion={prefersReducedMotion}>
               <p className="font-display text-6xl md:text-8xl mb-6 text-ink">Sutra <span className="text-accent-amber/80 text-5xl align-middle font-serif">(सूत्र)</span></p>
               <p className="font-sans text-xs font-bold tracking-[0.3em] uppercase text-ink-muted mb-12">Means "Thread"</p>
               <p className="font-serif text-2xl md:text-3xl text-ink leading-relaxed max-w-2xl mx-auto px-6">
@@ -133,7 +151,7 @@ export default function HomePage() {
               {/* Visual Split */}
               <div className="absolute left-1/2 -top-12 bottom-0 w-px bg-black/10 hidden md:block" />
 
-              <FadeIn className="grid md:grid-cols-2 gap-12 text-center md:text-left items-start max-w-xl mx-auto bg-[#FBFBF9] relative z-10">
+              <FadeIn className="grid md:grid-cols-2 gap-12 text-center md:text-left items-start max-w-xl mx-auto bg-[#FBFBF9] relative z-10" prefersReducedMotion={prefersReducedMotion}>
                 <div className="md:pr-8 md:text-right group">
                   <div className="inline-block p-3 mb-4 rounded-full bg-black/5 text-ink-muted group-hover:bg-red-50 group-hover:text-red-900 transition-colors">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -163,7 +181,7 @@ export default function HomePage() {
       {/* The Tool - Visual Demonstration */}
       <section className="py-32 px-6 bg-white border-y border-black/5">
         <div className="max-w-6xl mx-auto">
-          <FadeIn className="grid md:grid-cols-2 gap-24 items-center">
+          <FadeIn className="grid md:grid-cols-2 gap-24 items-center" prefersReducedMotion={prefersReducedMotion}>
             <div className="order-2 md:order-1">
               <h2 className="font-display text-6xl md:text-8xl mb-12 text-ink">Two modes.<br />One purpose.</h2>
               <div className="space-y-16">
@@ -192,7 +210,7 @@ export default function HomePage() {
       <footer className="py-40 px-6 text-center bg-[#FBFBF9] relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-black/5 to-transparent" />
 
-        <FadeIn>
+        <FadeIn prefersReducedMotion={prefersReducedMotion}>
           <h2 className="font-display text-5xl md:text-7xl text-ink mb-16 tracking-tight">
             Protect your mind.
           </h2>
@@ -213,13 +231,13 @@ export default function HomePage() {
   );
 }
 
-function FadeIn({ children, className, delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
+function FadeIn({ children, className, delay = 0, prefersReducedMotion = false }: { children: React.ReactNode, className?: string, delay?: number, prefersReducedMotion?: boolean }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={className}
     >
       {children}

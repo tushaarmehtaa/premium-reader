@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
+import { useClientSearchParams } from '@/hooks/useClientSearchParams';
+import { useSupabaseClient } from '@/hooks/useSupabaseClient';
+
+export const dynamic = 'force-dynamic';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -13,13 +16,18 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useClientSearchParams();
   const isExtension = searchParams.get('extension') === 'true';
-  const supabase = createClient();
+  const supabase = useSupabaseClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!supabase) {
+      setError('Authentication not initialized');
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');

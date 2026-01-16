@@ -18,18 +18,18 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article, onDelete }: ArticleCardProps) {
-  const savedDate = new Date(article.saved_at).toLocaleDateString('en-US', {
+  const savedDate = new Intl.DateTimeFormat(undefined, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-  });
+  }).format(new Date(article.saved_at));
 
   const insightCount = article.insights?.length || 0;
 
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onDelete && confirm('Delete this article?')) {
+    if (onDelete && window.confirm('Are you sure you want to delete this article? This action cannot be undone.')) {
       onDelete(article.id);
     }
   };
@@ -45,6 +45,7 @@ export function ArticleCard({ article, onDelete }: ArticleCardProps) {
             <button
               onClick={handleDelete}
               className="text-gray-400 hover:text-red-500 transition opacity-0 group-hover:opacity-100 ml-2 flex-shrink-0"
+              aria-label="Delete article"
               title="Delete article"
             >
               <svg

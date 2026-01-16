@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase';
+import { useSupabaseClient } from '@/hooks/useSupabaseClient';
 import { Navbar } from '@/components/Navbar';
+
+export const dynamic = 'force-dynamic';
 
 interface UserSettings {
   theme: 'light' | 'dark' | 'sepia';
@@ -31,10 +33,12 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useSupabaseClient();
 
   useEffect(() => {
     async function loadUser() {
+      if (!supabase) return;
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -62,7 +66,7 @@ export default function SettingsPage() {
   }, [router, supabase]);
 
   const handleSave = async () => {
-    if (!profile) return;
+    if (!profile || !supabase) return;
 
     setSaving(true);
     setMessage('');
