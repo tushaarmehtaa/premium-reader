@@ -42,3 +42,4 @@ apps/extension/*.pem
 # Misc
 .cache/
 tmp/
+.vercel
