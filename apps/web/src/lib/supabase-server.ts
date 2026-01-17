@@ -1,12 +1,21 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { createServerClient as createSupabaseServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 export function createClient() {
+    // Check if Supabase is configured
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    // Return null if credentials are missing or using placeholder values
+    if (!url || !key || url === 'your-supabase-url' || key === 'your-supabase-anon-key') {
+        return null;
+    }
+
     const cookieStore = cookies();
 
-    return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    return createSupabaseServerClient(
+        url,
+        key,
         {
             cookies: {
                 get(name: string) {
